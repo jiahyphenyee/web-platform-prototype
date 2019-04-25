@@ -34,19 +34,20 @@
 <div class="row">
     {% for project in user_projects %}
         <div class="col-sm-4" style="margin-top: 1rem">
-                <div class="project-card-sm">
-                    <!-- <img src="{{ project_item.featured_image }}" class="card-img-top" > -->
-                    <img src="https://howtomechatronics.com/wp-content/uploads/2017/11/Arduino-Robot-Car-Project.jpg" class="card-img-top" style="height: 200px">
-                    <div class="card-body">
-                        <h4 class="card-title">{{ project.title }}</h4>
-                        <p class="card-text">{{ project.caption }}</p>
-                        <div class="row" style="display: flex; justify-content: space-around">
-                            <a href="{% url 'projects:project_page' project.project_uid %}" class="card-link">
-                                View Project <i class="fas fa-chevron-circle-right"></i></a>
-                        </div>
+            <div class="project-card-sm">
+                <!-- <img src="{{ project_item.featured_image }}" class="card-img-top" > -->
+                <img src="https://howtomechatronics.com/wp-content/uploads/2017/11/Arduino-Robot-Car-Project.jpg" class="card-img-top" style="height: 200px">
+                <div class="card-body">
+                    <h4 class="card-title">{{ project.title }}</h4>
+                    <p class="card-text">{{ project.caption }}</p>
+                    <div class="row" style="display: flex; justify-content: space-around">
+                        <a href="{% url 'projects:project_page' project.project_uid %}" class="card-link">
+                            View Project <i class="fas fa-chevron-circle-right"></i></a>
                     </div>
                 </div>
-        {% endfor %}
-    </div>
+            </div>
+        </div>
+    {% endfor %}
+    
 </div>
 {% endblock %}
