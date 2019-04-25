@@ -16,27 +16,39 @@
             <h1 class="profile-name">{{ current_user.display_name }}</h1>
             <p>{{ current_user.user_id }}</p>
             <br>
-            <h5 class="profile-faculty text-primary">{{ current_user.pillar }} - Class of {{ current_user.graduation_year }}</h5>
+            <h5 class="profile-faculty text-primary">{{ current_user.pillar }} - Class of
+                {{ current_user.graduation_year }}</h5>
             <p class="profile-bio text-primary">{{ current_user.bio }}</p>
         </div>
         <div class="col-sm-3">
             <div class="edit-profile">
-                <!-- <a href="#" class="btn btn-md edit-button">Edit Profile <i class="far fa-edit" style="color:black"></i></a>
-                <br> -->
-                <button type="button" class="btn btn-outline-primary">Contact  <i class="fas fa-phone"></i></button>
+                {% if user.is_authenticated %}
+                {% if user.username == current_user.username %}
+                <a class="btn btn-outline-primary btn-block" href="{% url 'projects:submit_new' %}" role="button"><i
+                        class="far fa-edit"></i> Submit Project</a>
+                <a class="btn btn-outline-primary btn-block" href="#" role="button"><i class="far fa-edit"></i> Edit
+                    Profile</a>
+                <hr>
+                {% endif %}
+                {% endif %}
+                <a class="btn btn-outline-primary btn-block" href="mailto:{{ current_user.contact_email }}"
+                    role="button"><i class="fas fa-at"></i> Contact User</a>
             </div>
         </div>
     </div>
 
-<div class="row">
-    <h3>Projects</h3>
-</div>
-<div class="row">
-    {% for project in user_projects %}
+    <div class="row">
+        <h3>Projects</h3>
+    </div>
+    <div class="row">
+        {% for project in user_projects %}
         <div class="col-sm-4" style="margin-top: 1rem">
             <div class="project-card-sm">
-                <!-- <img src="{{ project_item.featured_image }}" class="card-img-top" > -->
-                <img src="https://howtomechatronics.com/wp-content/uploads/2017/11/Arduino-Robot-Car-Project.jpg" class="card-img-top" style="height: 200px">
+                {% if project.featured_image == "" %}
+                <img src="https://howtomechatronics.com/wp-content/uploads/2017/11/Arduino-Robot-Car-Project.jpg">
+                {% else %}
+                <img src="{{ project.featured_image }}">
+                {% endif %}
                 <div class="card-body">
                     <h4 class="card-title">{{ project.title }}</h4>
                     <p class="card-text">{{ project.caption }}</p>
@@ -47,7 +59,7 @@
                 </div>
             </div>
         </div>
-    {% endfor %}
-    
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}

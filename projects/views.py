@@ -22,7 +22,7 @@ gh = Github(ACCESS_TOKEN)
 
 def index(request):
     top_projects_list = models.Project.objects.order_by(
-        "-published_date").filter(status="ACCEPT")[:2]
+        "-published_date").filter(status="ACCEPT")[:4]
     recent_projects_list = models.Project.objects.order_by(
         "-published_date").filter(status="ACCEPT")[:9]
     context = {"top_projects_list": top_projects_list,
@@ -98,18 +98,10 @@ def project_view(request, project_uid):
         return HttpResponseNotFound("Project not approved!")
 
 
-def project_listfilter(request):
+def project_list_view(request):
     f = ProjectFilter(
-        request.GET, queryset=models.Project.objects.all().filter(status="ACCEPT"))
-    return render(request, "projects/listfilter.html", {"filter": f})
-
-
-def projects_list_view(request):
-    projects_list = models.Project.objects.order_by(
-        "-published_date").filter(status="ACCEPT")[:50]
-    context = {"projects_list": projects_list,
-               "tags": models.Project.tags.all()}
-    return render(request, "projects/list.html", context)
+        request.GET, queryset=models.Project.objects.order_by("-published_date").filter(status="ACCEPT"))
+    return render(request, "projects/list.html", {"filter": f})
 
 
 @login_required
@@ -134,7 +126,8 @@ def submit_new_project(request):
                               title=data["project_name"],
                               caption=data["caption"],
                               category=data["category"],
-                              url=data["github_url"])
+                              url=data["github_url"],
+                              featured_image=data["featured_image"])
 
             # redirect to a new URL:
             return HttpResponseRedirect("/admin/approval")
