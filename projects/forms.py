@@ -16,7 +16,10 @@ class SubmissionForm(forms.Form):
 
     def clean(self):
         data = self.cleaned_data
-        if "github.com/" not in data['github_url']:
+        try:
+            if "github.com/" not in data['github_url']:
+                raise forms.ValidationError("You must provide a link to a GitHub repository!")
+        except:
             raise forms.ValidationError("You must provide a link to a GitHub repository!")
 
 class UserProfileForm(forms.ModelForm):
@@ -37,3 +40,18 @@ class UserProfileForm(forms.ModelForm):
         user_profile.save()
         return user_profile
 
+class ProjectEditForm(forms.ModelForm):
+    class Meta:
+        model = models.Project
+        fields = ["title",
+                  "caption",
+                  "featured_image",
+                  "url",
+                  "poster_url"]
+
+    def save(self, project=None):
+        project_edit = super(ProjectEditForm, self).save(commit=False)
+        if project:
+            project_edit.project = project
+        project_edit.save()
+        return project_edit

@@ -1,6 +1,6 @@
 # web-platform-prototype
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8b8aa4074fe34ca5b8331b2a64f81de0)](https://app.codacy.com/app/tlkh/web-platform-prototype?utm_source=github.com&utm_medium=referral&utm_content=OpenSUTD/web-platform-prototype&utm_campaign=Badge_Grade_Settings) [![Travis (.org)](https://img.shields.io/travis/OpenSUTD/web-platform-prototype.svg?label=tests&logo=travis)](https://travis-ci.org/OpenSUTD/web-platform-prototype) [![Coverage Status](https://coveralls.io/repos/github/OpenSUTD/web-platform-prototype/badge.svg?branch=HEAD)](https://coveralls.io/github/OpenSUTD/web-platform-prototype?branch=HEAD) ![GitHub last commit](https://img.shields.io/github/last-commit/opensutd/web-platform-prototype.svg)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8b8aa4074fe34ca5b8331b2a64f81de0)](https://app.codacy.com/app/tlkh/web-platform-prototype?utm_source=github.com&utm_medium=referral&utm_content=OpenSUTD/web-platform-prototype&utm_campaign=Badge_Grade_Settings) [![Travis (.org)](https://img.shields.io/travis/OpenSUTD/web-platform-prototype.svg?label=tests&logo=travis)](https://travis-ci.org/OpenSUTD/web-platform-prototype) [![Coverage Status](https://coveralls.io/repos/github/OpenSUTD/web-platform-prototype/badge.svg?branch=master)](https://coveralls.io/github/OpenSUTD/web-platform-prototype?branch=master) ![GitHub last commit](https://img.shields.io/github/last-commit/opensutd/web-platform-prototype.svg)
 
 Prototype for the Eventual OpenSUTD Web Platform
 
@@ -38,7 +38,9 @@ docker run --rm \
  --env GH_ACCESS_TOKEN=${GH_ACCESS_TOKEN} \
  -v ${PWD}:/app \
  opensutd/web-platform:${TAG} \
- python3 manage.py runserver 0:8000
+  ./refresh_db.sh && \
+  python3 manage.py collectstatic --noinput && \
+  python3 manage.py runserver 0:8000
 ```
 
 ## Getting GitHub login working
@@ -63,6 +65,9 @@ docker run --rm \
  -v ${PWD}:/app \
  opensutd/web-platform:latest-dev \
  bash -c './refresh_db.sh &&  python3 manage.py test'
+
+ # to test coverage
+ coverage run --source=. manage.py test && coverage report -m 
 ```
 
 ### CI Tests
