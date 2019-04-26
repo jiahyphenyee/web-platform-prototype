@@ -11,25 +11,30 @@
             {% for project_item in projects_list %}
             <div class="col-sm-4" style="margin-top: 2rem">
                 <div class="project-card-sm">
-                    <!-- <img src="{{ project_item.featured_image }}" class="card-img-top"> -->
+                    {% if project_item.featured_image == "" %}
+                    <img src="https://howtomechatronics.com/wp-content/uploads/2017/11/Arduino-Robot-Car-Project.jpg">
+                    {% else %}
+                    <img src="{{ project_item.featured_image }}">
+                    {% endif %}
                     <div class="card-body">
-                        <h4 class="card-title">{{ project_item.title }}</h4>
-                        <p class="card-text">{{ project_item.caption }}</p>
+                        <h4 class="card-title pending-project-title">{{ project_item.title }}</h4>
+                        <p class="card-text">(Pending approval) {{ project_item.caption }}</p>
                         <div class="row">
                             <div class="col-sm-6" style="display: flex; justify-content: space-around">
                                 <form action='/actions/approve/{{ project_item.project_uid }}/' method='GET'>
-                                    <button type="submit" class="btn btn-success">Approve</button>
+                                    <button type="submit" class="btn btn-success button-accept-pending">Approve</button>
                                 </form>
                             </div>
                             <div class="col-sm-6" style="display: flex; justify-content: space-around">
                                 <form action='/actions/reject/{{ project_item.project_uid }}/' method='GET'>
-                                    <button type="submit" class="btn btn-danger">Reject</button>
+                                    <button type="submit" class="btn btn-danger button-reject-pending">Reject</button>
                                 </form>
                             </div>
                         </div>
                         <hr>
                         <div class="row" style="display: flex; justify-content: flex-end">
-                            <a href="/projects/{{ project_item.project_uid }}/" class="btn btn-md edit-button">
+                            <a href="{% url 'projects:project_page_bypass' project_item.project_uid %}"
+                                class="btn btn-md edit-button pending-project-link">
                                 View Project <i class="fa fa-angle-right" style="color:black"></i></a>
                         </div>
                     </div>
@@ -37,19 +42,64 @@
             </div>
             {% endfor %}
             {% else %}
-            
             <div style="width: 100%">
                 <div style="text-align:center; margin-top: 80px">
                     <p>Yay! No more pending projects to review.</p>
                     <br>
                     <img src='{% static "images/yay.gif" %}' style="height: 200px">
-                    
                 </div>
             </div>
-            
             {% endif %}
         </div>
-    
+        <br>
+        <hr>
+        <br>
+        <h2>Previously Rejected Projects</h1>
+            <div class="row">
+                {% if rejected_projects_list %}
+                <!-- start iteration -->
+                {% for project_item in rejected_projects_list %}
+                <div class="col-sm-4" style="margin-top: 2rem">
+                    <div class="project-card-sm">
+                        {% if project_item.featured_image == "" %}
+                        <img
+                            src="https://howtomechatronics.com/wp-content/uploads/2017/11/Arduino-Robot-Car-Project.jpg">
+                        {% else %}
+                        <img src="{{ project_item.featured_image }}">
+                        {% endif %}
+                        <div class="card-body">
+                            <h4 class="card-title rejected-project-title">{{ project_item.title }}</h4>
+                            <p class="card-text">(Rejected) {{ project_item.caption }}</p>
+                            <div class="row">
+                                    <div class="col-sm-6" style="display: flex; justify-content: space-around">
+                                        <form action='/actions/approve/{{ project_item.project_uid }}/' method='GET'>
+                                            <button type="submit" class="btn btn-success button-accept-reject">Approve</button>
+                                        </form>
+                                    </div>
+                                    <div class="col-sm-6" style="display: flex; justify-content: space-around">
+                                        <form>
+                                            <button type="submit" disabled class="btn btn-danger disabled button-reject-reject" role="button" aria-disabled="true">Reject</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row" style="display: flex; justify-content: flex-end">
+                                    <a href="{% url 'projects:project_page_bypass' project_item.project_uid %}"
+                                        class="btn btn-md edit-button rejected-project-link">
+                                        View Project <i class="fa fa-angle-right" style="color:black"></i></a>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div style="width: 100%">
+                        <div style="text-align:center; margin-top: 80px">
+                            <p>There are no previously rejected projects.</p>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
     </div>
 </div>
 {% endblock %}
